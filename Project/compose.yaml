@@ -1,0 +1,62 @@
+services:
+  frontend:
+    build:
+      context: frontend
+      target: development
+    ports:
+      - "3000:3000"                # Front accessible sur http://localhost:3000
+    stdin_open: true
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: always
+    networks:
+      - react-express
+    depends_on:
+      - backend
+    environment:
+      # Le front appelle l'API via le nom de service Docker
+      - REACT_APP_API_URL=http://localhost:3001/api
+      - REACT_APP_SOCKET_URL=http://localhost:3001
+
+  backend:
+    restart: always
+    build:
+      context: backend
+      target: development
+    volumes:
+      - ./backend:/usr/src/app
+      - /usr/src/app/node_modules
+    command: ["sh","-c","if [ -d /usr/src/app/node_modules ]; then echo 'node_modules exist'; else npm ci; fi && npm start"]
+
+    depends_on:
+      - mongo
+    networks:
+      - express-mongo
+      - react-express
+    ports:
+      - "3001:3000" 
+    expose:
+      - "3000"                    
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/productsdb
+      - JWT_SECRET=supersecret_stable  
+
+  mongo:
+    restart: always
+    image: mongo:4.2.0
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - express-mongo
+    expose:
+      - "27017"
+
+networks:
+  react-express:
+  express-mongo:
+
+volumes:
+  mongo_data:

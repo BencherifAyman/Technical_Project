@@ -1,0 +1,32 @@
+{
+  "root": true,
+  "env": {
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:n/recommended",
+    "plugin:import/recommended",
+    "plugin:security/recommended",
+    "prettier"
+  ],
+  "plugins": ["import", "n", "security"],
+  "parserOptions": {
+    "ecmaVersion": 2021,
+    "sourceType": "script"
+  },
+  "rules": {
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "no-console": "off",
+    "n/no-unsupported-features/es-builtins": "off",
+    "import/order": [
+      "warn",
+      {
+        "alphabetize": { "order": "asc", "caseInsensitive": true },
+        "newlines-between": "always"
+      }
+    ]
+  },
+  "ignorePatterns": ["node_modules/", "logs/", "coverage/"]
+}
