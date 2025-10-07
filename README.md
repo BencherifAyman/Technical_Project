@@ -102,5 +102,6 @@ docker compose up --build
 
 ```
 ### Améliorations possible
-- sauvegarder le token dans la base de données
-- utiliser un .env pour les variables sensibles
+- Sauvegarder le token dans la base de données
+- Utiliser un .env pour les variables sensibles
+- Amélioration du design
